@@ -1,0 +1,19 @@
+name: CD
+
+run-name: Publish ${{ github.ref_name }}
+
+on:
+  workflow_dispatch:
+  push:
+    tags:
+      - '*.*.*'
+      - '!v*'
+
+jobs:
+  buf:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+        with:
+          ref: ${{ github.ref_name }}
