@@ -2,7 +2,7 @@
 WITH consumed AS (
   UPDATE credential
      SET sign_count = $3, backup_state = $4, uv_initialized = $5, current_login_challenge = NULL
-   WHERE id = $1 AND current_login_challenge = $2
+   WHERE credential.id = $1 AND credential.current_login_challenge = $2
   RETURNING principal_id
 )
 UPDATE principal
