@@ -2,6 +2,12 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## 0.1.2 - 2026-09-21
+#### Bug Fixes
+- glob it - (4ab9800) - Nathan Blair
+
+- - -
+
 ## 0.1.1 - 2026-09-21
 #### Bug Fixes
 - qualify id - (6cabc4e) - Nathan Blair
