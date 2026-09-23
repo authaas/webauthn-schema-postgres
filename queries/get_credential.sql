@@ -1,4 +1,4 @@
 -- name: GetCredential :one
 SELECT *
-  FROM credential
+  FROM webauthn_data.credential
  WHERE id = $1;

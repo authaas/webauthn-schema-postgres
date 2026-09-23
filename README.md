@@ -3,7 +3,7 @@
 The WebAuthn mechanism's PostgreSQL schema, and the statements the WebAuthn
 data service runs against it.
 
-`credential` references `principal` from `identity-schema-postgres`, and
+`credential` references `identity` from `identity-schema-postgres`, and
 `Register` and `Login` write both tables in one statement, so this schema is
 applied after the identity's and its queries are checked against both.
 
