@@ -1,4 +1,12 @@
 -- name: Register :exec
+-- The grant is written inline here instead of through identity_data.assume,
+-- which every other path that concludes in a grant calls. It should call it.
+-- It cannot: a data-modifying CTE's inserts are invisible to the rest of the
+-- statement, so the function would find no membership and answer false. The
+-- ways out are a second statement in a transaction the handler opens, or
+-- moving the whole flow into a plpgsql function, and both cost more than the
+-- duplication does.
+--
 -- The ids and the two creation dates are bound here rather than in the
 -- INSERTs so each carries its own name; a parameter written straight into a
 -- column is named for that column, and the three tables collide on id and on
@@ -17,10 +25,10 @@ WITH args AS (
 ), membership_inserted AS (
   INSERT INTO identity_data.realm_membership (identity_id, realm_id, name, display_name,
                                               creation_date, last_authenticated_date,
-                                              grant_hash, credentialable, nbf, exp)
+                                              grant_hash, credentialable)
   SELECT identity_inserted.id, args.realm_id, $6, $7,
          args.membership_creation_date, $8,
-         $9, TRUE, $10, $11
+         $9, TRUE
     FROM args, identity_inserted
   RETURNING identity_id, realm_id
 )
@@ -28,5 +36,5 @@ INSERT INTO webauthn_data.credential (id, identity_id, realm_id, rp_id, sign_cou
                                       backup_state, attestation_object,
                                       attestation_client_data_json, transports)
 SELECT args.credential_id, membership_inserted.identity_id, membership_inserted.realm_id,
-       $12, $13, $14, $15, $16, $17, $18
+       $10, $11, $12, $13, $14, $15, $16
   FROM args, membership_inserted;
